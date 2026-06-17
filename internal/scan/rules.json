@@ -1,0 +1,1463 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "private-key",
+      "name": "Private Key (PEM)",
+      "severity": "critical",
+      "category": "key",
+      "regex": "-----BEGIN[ A-Z0-9]*PRIVATE KEY-----",
+      "keywords": [
+        "private key"
+      ],
+      "entropy_min": 0,
+      "description": "PEM-encoded private key (RSA/EC/DSA/OpenSSH/PGP)."
+    },
+    {
+      "id": "putty-private-key",
+      "name": "PuTTY Private Key",
+      "severity": "critical",
+      "category": "key",
+      "regex": "PuTTY-User-Key-File-[0-9]",
+      "keywords": [
+        "putty-user-key-file"
+      ],
+      "entropy_min": 0,
+      "description": "PuTTY .ppk private key file."
+    },
+    {
+      "id": "aws-access-key-id",
+      "name": "AWS Access Key ID",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "\\b((?:A3T[A-Z0-9]|AKIA|ASIA|ABIA|ACCA|AGPA|AIDA|AIPA|ANPA|ANVA|AROA|APKA)[A-Z0-9]{16})\\b",
+      "keywords": [
+        "akia",
+        "asia",
+        "abia",
+        "acca",
+        "agpa",
+        "aida",
+        "aipa",
+        "anpa",
+        "anva",
+        "aroa",
+        "apka",
+        "a3t"
+      ],
+      "entropy_min": 0,
+      "description": "AWS access key identifier."
+    },
+    {
+      "id": "aws-secret-access-key",
+      "name": "AWS Secret Access Key",
+      "severity": "critical",
+      "category": "cloud",
+      "regex": "(?i)aws.{0,20}?(?:secret|sak|key).{0,3}[:=]\\s*[\"']?([A-Za-z0-9/+=]{40})[\"']?",
+      "keywords": [
+        "aws"
+      ],
+      "entropy_min": 4.2,
+      "description": "AWS secret access key in context."
+    },
+    {
+      "id": "aws-session-token",
+      "name": "AWS Session Token",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "(?i)aws_session_token[\"']?\\s*[:=]\\s*[\"']?([A-Za-z0-9/+=]{100,})",
+      "keywords": [
+        "aws_session_token"
+      ],
+      "entropy_min": 4,
+      "description": "AWS temporary session token."
+    },
+    {
+      "id": "gcp-api-key",
+      "name": "Google API Key",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "\\b(AIza[0-9A-Za-z\\-_]{35})\\b",
+      "keywords": [
+        "aiza"
+      ],
+      "entropy_min": 0,
+      "description": "Google Cloud / Maps / Firebase API key."
+    },
+    {
+      "id": "gcp-oauth",
+      "name": "Google OAuth Access Token",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "\\b(ya29\\.[0-9A-Za-z\\-_]{20,})\\b",
+      "keywords": [
+        "ya29."
+      ],
+      "entropy_min": 0,
+      "description": "Google OAuth2 access token."
+    },
+    {
+      "id": "gcp-service-account",
+      "name": "GCP Service Account JSON",
+      "severity": "critical",
+      "category": "cloud",
+      "regex": "\"type\"\\s*:\\s*\"service_account\"",
+      "keywords": [
+        "service_account"
+      ],
+      "entropy_min": 0,
+      "description": "Google service-account credential JSON."
+    },
+    {
+      "id": "azure-storage-key",
+      "name": "Azure Storage AccountKey",
+      "severity": "critical",
+      "category": "cloud",
+      "regex": "AccountKey\\s*=\\s*([A-Za-z0-9+/=]{86,88})",
+      "keywords": [
+        "accountkey"
+      ],
+      "entropy_min": 4,
+      "description": "Azure storage account key in connection string."
+    },
+    {
+      "id": "azure-sas",
+      "name": "Azure SAS Token",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "sig=([A-Za-z0-9%]{43,53})%3[Dd]",
+      "keywords": [
+        "sig="
+      ],
+      "entropy_min": 3.5,
+      "description": "Azure Shared Access Signature."
+    },
+    {
+      "id": "azure-client-secret",
+      "name": "Azure AD Client Secret",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "\\b([0-9A-Za-z~._\\-]{3}8Q~[0-9A-Za-z~._\\-]{34})\\b",
+      "keywords": [
+        "8q~"
+      ],
+      "entropy_min": 3.5,
+      "description": "Azure AD application client secret."
+    },
+    {
+      "id": "github-pat",
+      "name": "GitHub Personal Access Token",
+      "severity": "high",
+      "category": "vcs",
+      "regex": "\\b((?:ghp|gho|ghu|ghs|ghr)_[0-9A-Za-z]{36})\\b",
+      "keywords": [
+        "ghp_",
+        "gho_",
+        "ghu_",
+        "ghs_",
+        "ghr_"
+      ],
+      "entropy_min": 0,
+      "description": "GitHub token (classic / app / refresh)."
+    },
+    {
+      "id": "github-fine-grained",
+      "name": "GitHub Fine-Grained PAT",
+      "severity": "high",
+      "category": "vcs",
+      "regex": "\\b(github_pat_[0-9A-Za-z_]{82})\\b",
+      "keywords": [
+        "github_pat_"
+      ],
+      "entropy_min": 0,
+      "description": "GitHub fine-grained personal access token."
+    },
+    {
+      "id": "gitlab-pat",
+      "name": "GitLab Personal Access Token",
+      "severity": "high",
+      "category": "vcs",
+      "regex": "\\b(glpat-[0-9A-Za-z\\-_]{20,})\\b",
+      "keywords": [
+        "glpat-"
+      ],
+      "entropy_min": 0,
+      "description": "GitLab personal/project access token."
+    },
+    {
+      "id": "gitlab-pipeline",
+      "name": "GitLab Pipeline/Runner Token",
+      "severity": "high",
+      "category": "vcs",
+      "regex": "\\b(glptt-[0-9a-f]{40}|GR1348941[0-9A-Za-z\\-_]{20})\\b",
+      "keywords": [
+        "glptt-",
+        "gr1348941"
+      ],
+      "entropy_min": 0,
+      "description": "GitLab pipeline trigger or runner registration token."
+    },
+    {
+      "id": "github-oauth-app",
+      "name": "GitHub App / OAuth client secret",
+      "severity": "medium",
+      "category": "vcs",
+      "regex": "(?i)github.{0,20}(?:secret|token).{0,3}[:=]\\s*[\"']?([0-9a-f]{40})[\"']?",
+      "keywords": [
+        "github"
+      ],
+      "entropy_min": 3,
+      "description": "GitHub OAuth app client secret (40 hex)."
+    },
+    {
+      "id": "slack-token",
+      "name": "Slack Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(xox[baprs]-[0-9A-Za-z-]{10,72})\\b",
+      "keywords": [
+        "xoxb-",
+        "xoxa-",
+        "xoxp-",
+        "xoxr-",
+        "xoxs-"
+      ],
+      "entropy_min": 0,
+      "description": "Slack API token."
+    },
+    {
+      "id": "slack-webhook",
+      "name": "Slack Webhook URL",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "https://hooks\\.slack\\.com/services/T[0-9A-Za-z_]+/B[0-9A-Za-z_]+/[0-9A-Za-z]{20,}",
+      "keywords": [
+        "hooks.slack.com"
+      ],
+      "entropy_min": 0,
+      "description": "Slack incoming webhook URL."
+    },
+    {
+      "id": "stripe-secret",
+      "name": "Stripe Secret Key",
+      "severity": "critical",
+      "category": "saas",
+      "regex": "\\b((?:sk|rk)_(?:live|test)_[0-9A-Za-z]{24,99})\\b",
+      "keywords": [
+        "sk_live_",
+        "sk_test_",
+        "rk_live_",
+        "rk_test_"
+      ],
+      "entropy_min": 0,
+      "description": "Stripe secret / restricted API key."
+    },
+    {
+      "id": "sendgrid",
+      "name": "SendGrid API Key",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(SG\\.[0-9A-Za-z\\-_]{22}\\.[0-9A-Za-z\\-_]{43})\\b",
+      "keywords": [
+        "sg."
+      ],
+      "entropy_min": 0,
+      "description": "SendGrid API key."
+    },
+    {
+      "id": "twilio-sid",
+      "name": "Twilio API credential",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "(?i)twilio.{0,40}?\\b((?:AC|SK)[0-9a-f]{32})\\b",
+      "keywords": [
+        "twilio"
+      ],
+      "entropy_min": 3,
+      "description": "Twilio account/API SID near a 'twilio' reference."
+    },
+    {
+      "id": "mailgun",
+      "name": "Mailgun API Key",
+      "severity": "high",
+      "category": "saas",
+      "regex": "(?i)mailgun.{0,40}?\\b(key-[0-9a-zA-Z]{32})\\b",
+      "keywords": [
+        "mailgun"
+      ],
+      "entropy_min": 3,
+      "description": "Mailgun API key near a 'mailgun' reference."
+    },
+    {
+      "id": "mailchimp",
+      "name": "Mailchimp API Key",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b([0-9a-f]{32}-us[0-9]{1,2})\\b",
+      "keywords": [
+        "-us"
+      ],
+      "entropy_min": 3,
+      "description": "Mailchimp API key."
+    },
+    {
+      "id": "square-token",
+      "name": "Square Access Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b((?:sq0atp-|sq0csp-)[0-9A-Za-z\\-_]{22,43}|EAAA[0-9A-Za-z\\-_]{60})\\b",
+      "keywords": [
+        "sq0atp-",
+        "sq0csp-",
+        "eaaa"
+      ],
+      "entropy_min": 0,
+      "description": "Square OAuth / access token."
+    },
+    {
+      "id": "shopify-token",
+      "name": "Shopify Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(shp(?:at|ca|pa|ss)_[0-9a-fA-F]{32})\\b",
+      "keywords": [
+        "shpat_",
+        "shpca_",
+        "shppa_",
+        "shpss_"
+      ],
+      "entropy_min": 0,
+      "description": "Shopify access / custom-app / private-app token."
+    },
+    {
+      "id": "digitalocean",
+      "name": "DigitalOcean Token",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "\\b(do[opr]_v1_[0-9a-f]{64})\\b",
+      "keywords": [
+        "dop_v1_",
+        "doo_v1_",
+        "dor_v1_"
+      ],
+      "entropy_min": 0,
+      "description": "DigitalOcean personal/OAuth/refresh token."
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI API Key (legacy)",
+      "severity": "high",
+      "category": "ai",
+      "regex": "\\b(sk-(?:proj-)?[0-9A-Za-z\\-_]{20}T3BlbkFJ[0-9A-Za-z\\-_]{20,})\\b",
+      "keywords": [
+        "t3blbkfj"
+      ],
+      "entropy_min": 0,
+      "description": "OpenAI API key (legacy T3BlbkFJ format)."
+    },
+    {
+      "id": "openai-project",
+      "name": "OpenAI Project/Service Key",
+      "severity": "high",
+      "category": "ai",
+      "regex": "\\b(sk-(?:proj|svcacct|admin)-[0-9A-Za-z_\\-]{40,})\\b",
+      "keywords": [
+        "sk-proj-",
+        "sk-svcacct-",
+        "sk-admin-"
+      ],
+      "entropy_min": 3.5,
+      "description": "OpenAI project/service-account/admin API key."
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic API Key",
+      "severity": "high",
+      "category": "ai",
+      "regex": "\\b(sk-ant-[0-9A-Za-z\\-_]{20,})\\b",
+      "keywords": [
+        "sk-ant-"
+      ],
+      "entropy_min": 0,
+      "description": "Anthropic API key."
+    },
+    {
+      "id": "huggingface",
+      "name": "Hugging Face Token",
+      "severity": "high",
+      "category": "ai",
+      "regex": "\\b(hf_[0-9A-Za-z]{34})\\b",
+      "keywords": [
+        "hf_"
+      ],
+      "entropy_min": 0,
+      "description": "Hugging Face access token."
+    },
+    {
+      "id": "telegram-bot",
+      "name": "Telegram Bot Token",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "\\b([0-9]{8,10}:AA[0-9A-Za-z\\-_]{33})\\b",
+      "keywords": [
+        ":aa"
+      ],
+      "entropy_min": 0,
+      "description": "Telegram bot API token."
+    },
+    {
+      "id": "discord-bot",
+      "name": "Discord Bot Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b([MNO][A-Za-z0-9\\-_]{23}\\.[A-Za-z0-9\\-_]{6}\\.[A-Za-z0-9\\-_]{27,38})\\b",
+      "keywords": [
+        "discord"
+      ],
+      "entropy_min": 4,
+      "description": "Discord bot token (near a 'discord' reference)."
+    },
+    {
+      "id": "discord-webhook",
+      "name": "Discord Webhook",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "https://(?:ptb\\.|canary\\.)?discord(?:app)?\\.com/api/webhooks/[0-9]{17,20}/[0-9A-Za-z\\-_]{60,}",
+      "keywords": [
+        "discord",
+        "webhooks"
+      ],
+      "entropy_min": 0,
+      "description": "Discord webhook URL."
+    },
+    {
+      "id": "datadog",
+      "name": "Datadog API Key",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "(?i)(?:datadog|dd)[._-]?api[._-]?key[\"']?\\s*[:=]\\s*[\"']?([0-9a-f]{32})",
+      "keywords": [
+        "datadog",
+        "dd_api",
+        "dd-api"
+      ],
+      "entropy_min": 3,
+      "description": "Datadog API key."
+    },
+    {
+      "id": "pagerduty",
+      "name": "PagerDuty Token",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "(?i)pagerduty.{0,40}?(?:token|api[_\\-]?key)[\"']?\\s*[:=]\\s*[\"']?([0-9a-zA-Z+_\\-]{20})",
+      "keywords": [
+        "pagerduty"
+      ],
+      "entropy_min": 3.5,
+      "description": "PagerDuty API token near a 'pagerduty' reference."
+    },
+    {
+      "id": "jenkins-token",
+      "name": "Jenkins API Token",
+      "severity": "medium",
+      "category": "ci",
+      "regex": "(?i)jenkins.{0,20}(?:token|api).{0,3}[:=]\\s*[\"']?([0-9a-f]{32,34})",
+      "keywords": [
+        "jenkins"
+      ],
+      "entropy_min": 3,
+      "description": "Jenkins API token (contextual)."
+    },
+    {
+      "id": "npm-token",
+      "name": "npm Access Token",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(npm_[0-9A-Za-z]{36})\\b",
+      "keywords": [
+        "npm_"
+      ],
+      "entropy_min": 0,
+      "description": "npm automation/publish token."
+    },
+    {
+      "id": "npmrc-authtoken",
+      "name": ".npmrc _authToken",
+      "severity": "high",
+      "category": "registry",
+      "regex": "(?i)_authToken\\s*=\\s*([0-9A-Za-z\\-_=.]{16,})",
+      "keywords": [
+        "_authtoken"
+      ],
+      "entropy_min": 0,
+      "description": "npm registry auth token in .npmrc."
+    },
+    {
+      "id": "npmrc-auth-basic",
+      "name": ".npmrc _auth (base64)",
+      "severity": "high",
+      "category": "registry",
+      "regex": "(?i)(?:^|[^a-z])_auth\\s*=\\s*([A-Za-z0-9+/]{16,}={0,2})",
+      "keywords": [
+        "_auth"
+      ],
+      "entropy_min": 3.5,
+      "description": "Base64 basic-auth blob in .npmrc."
+    },
+    {
+      "id": "pypi-token",
+      "name": "PyPI Upload Token",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(pypi-AgEIcHlwaS5vcmc[0-9A-Za-z\\-_]{50,})\\b",
+      "keywords": [
+        "pypi-ageichlwas5vcmc"
+      ],
+      "entropy_min": 0,
+      "description": "PyPI API upload token."
+    },
+    {
+      "id": "nuget-apikey",
+      "name": "NuGet API Key",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(oy2[a-z0-9]{43})\\b",
+      "keywords": [
+        "oy2"
+      ],
+      "entropy_min": 3.5,
+      "description": "NuGet.org API key."
+    },
+    {
+      "id": "artifactory-apikey",
+      "name": "JFrog Artifactory API Key",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(AKCp[0-9A-Za-z]{60,80})\\b",
+      "keywords": [
+        "akcp"
+      ],
+      "entropy_min": 0,
+      "description": "JFrog Artifactory API key."
+    },
+    {
+      "id": "artifactory-ref-token",
+      "name": "JFrog Reference Token",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(cmVmdGtuOjAxOj[0-9A-Za-z]{40,})\\b",
+      "keywords": [
+        "cmvmdgtuoja"
+      ],
+      "entropy_min": 0,
+      "description": "JFrog reference token (base64 'reftkn:01:')."
+    },
+    {
+      "id": "docker-auth",
+      "name": "Docker config.json auth",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\"auth\"\\s*:\\s*\"([A-Za-z0-9+/]{16,}={0,2})\"",
+      "keywords": [
+        "\"auth\""
+      ],
+      "entropy_min": 3.5,
+      "description": "Base64 registry credential in Docker config.json."
+    },
+    {
+      "id": "dockercfg",
+      "name": ".dockercfg credential",
+      "severity": "high",
+      "category": "registry",
+      "regex": "(?i)\"(?:auth|password)\"\\s*:\\s*\"([^\"]{8,})\"",
+      "keywords": [
+        "dockercfg",
+        "\"password\""
+      ],
+      "entropy_min": 3,
+      "description": "Credential in legacy .dockercfg."
+    },
+    {
+      "id": "jwt",
+      "name": "JSON Web Token",
+      "severity": "medium",
+      "category": "token",
+      "regex": "\\b(eyJ[A-Za-z0-9\\-_=]{10,}\\.eyJ[A-Za-z0-9\\-_=]{10,}\\.[A-Za-z0-9\\-_.+/=]{10,})\\b",
+      "keywords": [
+        "eyj"
+      ],
+      "entropy_min": 3.8,
+      "description": "JWT (may carry credentials/claims)."
+    },
+    {
+      "id": "basic-auth-url",
+      "name": "Credentials in URL",
+      "severity": "high",
+      "category": "generic",
+      "regex": "(?i)[a-z][a-z0-9+.\\-]*://[^/\\s:@]{2,}:([^/\\s:@]{3,})@[^/\\s:@]+",
+      "keywords": [
+        "://"
+      ],
+      "entropy_min": 0,
+      "description": "Inline username:password@ in a URL."
+    },
+    {
+      "id": "db-conn-mongodb",
+      "name": "MongoDB URI password",
+      "severity": "high",
+      "category": "database",
+      "regex": "(?i)mongodb(?:\\+srv)?://[^/\\s:@]+:([^/\\s:@]{3,})@",
+      "keywords": [
+        "mongodb"
+      ],
+      "entropy_min": 0,
+      "description": "Password in a MongoDB connection URI."
+    },
+    {
+      "id": "db-conn-postgres",
+      "name": "Postgres URI password",
+      "severity": "high",
+      "category": "database",
+      "regex": "(?i)postgres(?:ql)?://[^/\\s:@]+:([^/\\s:@]{3,})@",
+      "keywords": [
+        "postgres"
+      ],
+      "entropy_min": 0,
+      "description": "Password in a Postgres connection URI."
+    },
+    {
+      "id": "db-conn-mysql",
+      "name": "MySQL URI password",
+      "severity": "high",
+      "category": "database",
+      "regex": "(?i)mysql://[^/\\s:@]+:([^/\\s:@]{3,})@",
+      "keywords": [
+        "mysql://"
+      ],
+      "entropy_min": 0,
+      "description": "Password in a MySQL connection URI."
+    },
+    {
+      "id": "db-conn-redis",
+      "name": "Redis URI password",
+      "severity": "high",
+      "category": "database",
+      "regex": "(?i)rediss?://[^/\\s:@]*:([^/\\s:@]{3,})@",
+      "keywords": [
+        "redis://",
+        "rediss://"
+      ],
+      "entropy_min": 0,
+      "description": "Password in a Redis connection URI."
+    },
+    {
+      "id": "jdbc-password",
+      "name": "JDBC / conn-string password",
+      "severity": "high",
+      "category": "database",
+      "regex": "(?i)(?:password|pwd)\\s*=\\s*([^;\\s\"'>]{4,});?",
+      "keywords": [
+        "password=",
+        "pwd="
+      ],
+      "entropy_min": 0,
+      "description": "Password in a JDBC/ADO.NET connection string."
+    },
+    {
+      "id": "amqp-conn",
+      "name": "AMQP URI password",
+      "severity": "high",
+      "category": "database",
+      "regex": "(?i)amqps?://[^/\\s:@]+:([^/\\s:@]{3,})@",
+      "keywords": [
+        "amqp://",
+        "amqps://"
+      ],
+      "entropy_min": 0,
+      "description": "Password in an AMQP/RabbitMQ URI."
+    },
+    {
+      "id": "maven-settings-password",
+      "name": "Maven settings.xml password",
+      "severity": "high",
+      "category": "registry",
+      "regex": "<password>\\s*([^<\\s]{4,})\\s*</password>",
+      "keywords": [
+        "<password>"
+      ],
+      "entropy_min": 0,
+      "description": "Server password in Maven settings.xml (unless encrypted {...})."
+    },
+    {
+      "id": "xml-key-element",
+      "name": "XML key/secret element",
+      "severity": "medium",
+      "category": "generic",
+      "regex": "(?i)<(?:apikey|api-key|secret|accesskey|access-key|token|clientsecret)>\\s*([^<\\s]{8,})\\s*</",
+      "keywords": [
+        "<apikey",
+        "<secret",
+        "<token",
+        "<accesskey",
+        "<clientsecret"
+      ],
+      "entropy_min": 3.5,
+      "description": "Secret-bearing XML element."
+    },
+    {
+      "id": "htpasswd",
+      "name": ".htpasswd entry",
+      "severity": "medium",
+      "category": "generic",
+      "regex": "(?m)^[A-Za-z0-9._\\-]+:(\\$(?:apr1|2[aby]|6|1)\\$[^\\s:]+)",
+      "keywords": [
+        "$apr1$",
+        "$2y$",
+        "$2a$",
+        "$2b$",
+        "$6$"
+      ],
+      "entropy_min": 0,
+      "description": "Hashed credential in an .htpasswd file."
+    },
+    {
+      "id": "rsa-id-marker",
+      "name": "OpenSSH key header",
+      "severity": "high",
+      "category": "key",
+      "regex": "ssh-(?:rsa|ed25519|dss) AAAA[0-9A-Za-z+/]{100,}",
+      "keywords": [
+        "ssh-rsa aaaa",
+        "ssh-ed25519 aaaa",
+        "ssh-dss aaaa"
+      ],
+      "entropy_min": 0,
+      "description": "OpenSSH public key (often paired with a private key nearby)."
+    },
+    {
+      "id": "generic-password-assign",
+      "name": "Generic password assignment",
+      "severity": "medium",
+      "category": "generic",
+      "regex": "(?i)(?:password|passwd|pwd|passphrase)[\"']?\\s*[:=]\\s*[\"']([^\"'\\s${}<>]{6,})[\"']",
+      "keywords": [
+        "password",
+        "passwd",
+        "pwd",
+        "passphrase"
+      ],
+      "entropy_min": 0,
+      "description": "Quoted password assignment."
+    },
+    {
+      "id": "generic-secret-assign",
+      "name": "Generic secret/token assignment",
+      "severity": "medium",
+      "category": "generic",
+      "regex": "(?i)(?:api[_\\-]?key|apikey|secret[_\\-]?key|secret|access[_\\-]?token|auth[_\\-]?token|client[_\\-]?secret|private[_\\-]?token|bearer)[\"']?\\s*[:=]\\s*[\"']?([A-Za-z0-9_\\-+/=.]{16,})",
+      "keywords": [
+        "apikey",
+        "api_key",
+        "api-key",
+        "secret",
+        "access_token",
+        "auth_token",
+        "client_secret",
+        "private_token",
+        "bearer"
+      ],
+      "entropy_min": 3.5,
+      "description": "Generic secret/token assignment (entropy-filtered)."
+    },
+    {
+      "id": "generic-high-entropy-hex",
+      "name": "High-entropy hex secret",
+      "severity": "low",
+      "category": "generic",
+      "regex": "(?i)(?:secret|api[_\\-]?key|token|hmac)[\"']?\\s*[:=]\\s*[\"']?([0-9a-f]{32,128})\\b",
+      "keywords": [
+        "secret",
+        "api_key",
+        "api-key",
+        "apikey",
+        "key",
+        "token",
+        "hmac"
+      ],
+      "entropy_min": 3,
+      "description": "Long hex value assigned to a sensitive name (checksum lengths suppressed)."
+    },
+    {
+      "id": "hashicorp-vault-legacy-token",
+      "name": "HashiCorp Vault Legacy Token (s.)",
+      "severity": "critical",
+      "category": "secrets-mgmt",
+      "regex": "(?i)vault.{0,40}?\\b(s\\.[A-Za-z0-9]{24})\\b",
+      "keywords": [
+        "vault"
+      ],
+      "entropy_min": 3.0,
+      "description": "HashiCorp Vault legacy token (s.<24>) near a 'vault' reference."
+    },
+    {
+      "id": "hashicorp-terraform-token",
+      "name": "Terraform Cloud/Enterprise API Token",
+      "severity": "high",
+      "category": "iac",
+      "regex": "(?i)\\b([a-z0-9]{14}\\.atlasv1\\.[a-z0-9_=-]{60,70})",
+      "keywords": [
+        "atlasv1"
+      ],
+      "entropy_min": 3.5,
+      "description": "Terraform Cloud / Enterprise (Atlas) API token used by terraform login and CI."
+    },
+    {
+      "id": "docker-hub-pat",
+      "name": "Docker Hub Personal Access Token",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(dckr_pat_[A-Za-z0-9_-]{27})",
+      "keywords": [
+        "dckr_pat_"
+      ],
+      "entropy_min": 3,
+      "description": "Docker Hub personal access token (dckr_pat_). Common in CI for image push/pull."
+    },
+    {
+      "id": "cloudflare-api-token",
+      "name": "Cloudflare API Token",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "(?i)cloudflare[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}([A-Za-z0-9_-]{40})\\b",
+      "keywords": [
+        "cloudflare"
+      ],
+      "entropy_min": 3.5,
+      "description": "Cloudflare scoped API token (40 chars) assigned to a cloudflare-named field."
+    },
+    {
+      "id": "cloudflare-global-api-key",
+      "name": "Cloudflare Global API Key",
+      "severity": "critical",
+      "category": "cloud",
+      "regex": "(?i)cloudflare[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}([a-f0-9]{37})\\b",
+      "keywords": [
+        "cloudflare"
+      ],
+      "entropy_min": 3,
+      "description": "Cloudflare Global API key (37 hex). Full account access."
+    },
+    {
+      "id": "new-relic-insert-key",
+      "name": "New Relic Insert Key",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b(NRII-[A-Za-z0-9_-]{32})\\b",
+      "keywords": [
+        "nrii-"
+      ],
+      "entropy_min": 3,
+      "description": "New Relic insights insert key (NRII- prefix)."
+    },
+    {
+      "id": "new-relic-user-api-key",
+      "name": "New Relic User API Key (NRAK)",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b(NRAK-[A-Z0-9]{27})\\b",
+      "keywords": [
+        "nrak-"
+      ],
+      "entropy_min": 3,
+      "description": "New Relic user API key (NRAK- prefix)."
+    },
+    {
+      "id": "grafana-service-account-token",
+      "name": "Grafana Service Account Token",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b(glsa_[A-Za-z0-9]{32}_[A-Fa-f0-9]{8})",
+      "keywords": [
+        "glsa_"
+      ],
+      "entropy_min": 3,
+      "description": "Grafana service account token (glsa_ prefix)."
+    },
+    {
+      "id": "grafana-cloud-api-token",
+      "name": "Grafana Cloud API Token",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b(glc_[A-Za-z0-9+/]{32,400}={0,3})",
+      "keywords": [
+        "glc_"
+      ],
+      "entropy_min": 3.5,
+      "description": "Grafana Cloud API token (glc_ prefix, base64)."
+    },
+    {
+      "id": "grafana-legacy-api-key",
+      "name": "Grafana Legacy API Key",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b(eyJrIjoi[A-Za-z0-9+/_-]{60,400}={0,3})",
+      "keywords": [
+        "eyjrijoi"
+      ],
+      "entropy_min": 3.5,
+      "description": "Grafana legacy API key (base64 JSON beginning {\"k\":\"...)."
+    },
+    {
+      "id": "sentry-user-token",
+      "name": "Sentry User Auth Token",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b(sntryu_[a-f0-9]{64})\\b",
+      "keywords": [
+        "sntryu_"
+      ],
+      "entropy_min": 3.5,
+      "description": "Sentry user-level auth token (sntryu_ prefix)."
+    },
+    {
+      "id": "linear-api-key",
+      "name": "Linear API Key",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(lin_api_[A-Za-z0-9]{40})\\b",
+      "keywords": [
+        "lin_api_"
+      ],
+      "entropy_min": 3,
+      "description": "Linear API key (lin_api_ prefix)."
+    },
+    {
+      "id": "atlassian-api-token",
+      "name": "Atlassian / Jira / Confluence API Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(ATATT3[A-Za-z0-9_=-]{186})",
+      "keywords": [
+        "atatt3"
+      ],
+      "entropy_min": 3.5,
+      "description": "Atlassian API token (ATATT3 prefix) for Jira/Confluence."
+    },
+    {
+      "id": "okta-access-token",
+      "name": "Okta API/Access Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "(?i)okta[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}(00[A-Za-z0-9_-]{40})",
+      "keywords": [
+        "okta"
+      ],
+      "entropy_min": 4,
+      "description": "Okta API/access token (00 prefix, 42 chars) in an okta-named field."
+    },
+    {
+      "id": "auth0-client-secret",
+      "name": "Auth0 Client Secret",
+      "severity": "high",
+      "category": "saas",
+      "regex": "(?i)auth0[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}([A-Za-z0-9_-]{32,80})",
+      "keywords": [
+        "auth0"
+      ],
+      "entropy_min": 3.5,
+      "description": "Auth0 client secret / API token in an auth0-named field."
+    },
+    {
+      "id": "azure-devops-pat",
+      "name": "Azure DevOps Personal Access Token",
+      "severity": "high",
+      "category": "vcs",
+      "regex": "(?i)(?:azure|devops|vsts|vso|system_accesstoken|azdo)[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}([a-z2-7]{52})\\b",
+      "keywords": [
+        "azure",
+        "devops",
+        "vsts",
+        "azdo",
+        "system_accesstoken"
+      ],
+      "entropy_min": 3.5,
+      "description": "Azure DevOps PAT (52-char base32) in a contextual field; tied to a DevOps-related key name to reduce noise."
+    },
+    {
+      "id": "airtable-pat",
+      "name": "Airtable Personal Access Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(pat[A-Za-z0-9]{14}\\.[a-f0-9]{64})\\b",
+      "keywords": [
+        "pat"
+      ],
+      "entropy_min": 3.5,
+      "description": "Airtable personal access token (pat...<dot>...hex)."
+    },
+    {
+      "id": "heroku-api-key-v2",
+      "name": "Heroku API Key (v2)",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "\\b(HRKU-AA[0-9A-Za-z_-]{58})\\b",
+      "keywords": [
+        "hrku-aa"
+      ],
+      "entropy_min": 4,
+      "description": "Heroku v2 API key (HRKU-AA prefix)."
+    },
+    {
+      "id": "rubygems-api-token",
+      "name": "RubyGems API Token",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(rubygems_[a-f0-9]{48})\\b",
+      "keywords": [
+        "rubygems_"
+      ],
+      "entropy_min": 3,
+      "description": "RubyGems.org API token (rubygems_ prefix)."
+    },
+    {
+      "id": "doppler-api-token",
+      "name": "Doppler API Token",
+      "severity": "high",
+      "category": "secrets-mgmt",
+      "regex": "\\b(dp\\.pt\\.[A-Za-z0-9]{43})\\b",
+      "keywords": [
+        "dp.pt."
+      ],
+      "entropy_min": 3.5,
+      "description": "Doppler personal API token (dp.pt. prefix)."
+    },
+    {
+      "id": "planetscale-token",
+      "name": "PlanetScale Service Token",
+      "severity": "high",
+      "category": "database",
+      "regex": "\\b(pscale_tkn_[A-Za-z0-9=._-]{32,64})",
+      "keywords": [
+        "pscale_tkn_"
+      ],
+      "entropy_min": 3,
+      "description": "PlanetScale service token (pscale_tkn_ prefix)."
+    },
+    {
+      "id": "planetscale-password",
+      "name": "PlanetScale DB Password",
+      "severity": "high",
+      "category": "database",
+      "regex": "\\b(pscale_pw_[A-Za-z0-9=._-]{32,64})",
+      "keywords": [
+        "pscale_pw_"
+      ],
+      "entropy_min": 3,
+      "description": "PlanetScale database password (pscale_pw_ prefix)."
+    },
+    {
+      "id": "prefect-api-token",
+      "name": "Prefect API Token",
+      "severity": "medium",
+      "category": "data",
+      "regex": "\\b(pnu_[A-Za-z0-9]{36})\\b",
+      "keywords": [
+        "pnu_"
+      ],
+      "entropy_min": 3,
+      "description": "Prefect Cloud API token (pnu_ prefix)."
+    },
+    {
+      "id": "pulumi-api-token",
+      "name": "Pulumi API Token",
+      "severity": "high",
+      "category": "iac",
+      "regex": "\\b(pul-[a-f0-9]{40})\\b",
+      "keywords": [
+        "pul-"
+      ],
+      "entropy_min": 3,
+      "description": "Pulumi access token (pul- prefix)."
+    },
+    {
+      "id": "readme-api-token",
+      "name": "Readme API Token",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "\\b(rdme_[a-z0-9]{70})\\b",
+      "keywords": [
+        "rdme_"
+      ],
+      "entropy_min": 3.5,
+      "description": "Readme.io API token (rdme_ prefix)."
+    },
+    {
+      "id": "scalingo-api-token",
+      "name": "Scalingo API Token",
+      "severity": "medium",
+      "category": "cloud",
+      "regex": "\\b(tk-us-[A-Za-z0-9_-]{48})\\b",
+      "keywords": [
+        "tk-us-"
+      ],
+      "entropy_min": 3,
+      "description": "Scalingo API token (tk-us- prefix)."
+    },
+    {
+      "id": "shippo-api-token",
+      "name": "Shippo API Token",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "\\b(shippo_(?:live|test)_[a-fA-F0-9]{40})\\b",
+      "keywords": [
+        "shippo_"
+      ],
+      "entropy_min": 3,
+      "description": "Shippo API token (shippo_live/test_ prefix)."
+    },
+    {
+      "id": "flutterwave-secret-key",
+      "name": "Flutterwave Secret Key",
+      "severity": "high",
+      "category": "payment",
+      "regex": "\\b(FLWSECK(?:_TEST)?-[a-h0-9]{32}-X)\\b",
+      "keywords": [
+        "flwseck"
+      ],
+      "entropy_min": 3.0,
+      "description": "Flutterwave secret key (FLWSECK / FLWSECK_TEST prefix)."
+    },
+    {
+      "id": "adobe-client-secret",
+      "name": "Adobe Client Secret",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(p8e-[a-z0-9]{32})\\b",
+      "keywords": [
+        "p8e-"
+      ],
+      "entropy_min": 3,
+      "description": "Adobe OAuth client secret (p8e- prefix)."
+    },
+    {
+      "id": "mapbox-secret-token",
+      "name": "Mapbox Secret Token",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "\\b(sk\\.[a-zA-Z0-9]{60}\\.[a-zA-Z0-9]{22})\\b",
+      "keywords": [
+        "sk."
+      ],
+      "entropy_min": 3.5,
+      "description": "Mapbox secret access token (sk. prefix)."
+    },
+    {
+      "id": "plaid-access-token",
+      "name": "Plaid Access Token",
+      "severity": "high",
+      "category": "payment",
+      "regex": "\\b(access-(?:sandbox|development|production)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\b",
+      "keywords": [
+        "access-sandbox-",
+        "access-development-",
+        "access-production-"
+      ],
+      "entropy_min": 3,
+      "description": "Plaid access token (access-<env>-<uuid>)."
+    },
+    {
+      "id": "gocardless-live-token",
+      "name": "GoCardless Live Access Token",
+      "severity": "high",
+      "category": "payment",
+      "regex": "(?i)gocardless[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}(live_[A-Za-z0-9_=-]{40})",
+      "keywords": [
+        "gocardless"
+      ],
+      "entropy_min": 3.5,
+      "description": "GoCardless live access token in a gocardless-named field."
+    },
+    {
+      "id": "algolia-admin-key",
+      "name": "Algolia Admin API Key",
+      "severity": "high",
+      "category": "saas",
+      "regex": "(?i)algolia[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}([a-zA-Z0-9]{32})\\b",
+      "keywords": [
+        "algolia"
+      ],
+      "entropy_min": 3.5,
+      "description": "Algolia admin/API key (32 chars) in an algolia-named field."
+    },
+    {
+      "id": "intercom-access-token",
+      "name": "Intercom Access Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "(?i)intercom[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}([A-Za-z0-9=_-]{60})\\b",
+      "keywords": [
+        "intercom"
+      ],
+      "entropy_min": 3.5,
+      "description": "Intercom access token (60 chars) in an intercom-named field."
+    },
+    {
+      "id": "sumologic-access-key",
+      "name": "Sumo Logic Access Key",
+      "severity": "medium",
+      "category": "observability",
+      "regex": "(?i)sumo[a-z0-9._\\- ]{0,25}[:=][\\s\"']{0,3}([a-z0-9]{64})\\b",
+      "keywords": [
+        "sumo"
+      ],
+      "entropy_min": 3.5,
+      "description": "Sumo Logic access key (64 chars) in a sumo-named field."
+    },
+    {
+      "id": "yandex-cloud-iam-token",
+      "name": "Yandex Cloud IAM/AWS Token",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "(?i:yandex).{0,40}?\\b(YC[A-Za-z0-9_-]{38})\\b",
+      "keywords": [
+        "yandex"
+      ],
+      "entropy_min": 3.5,
+      "description": "Yandex Cloud key (YC...) near a 'yandex' reference."
+    },
+    {
+      "id": "private-key-pkcs8",
+      "name": "PKCS#8 Private Key Header",
+      "severity": "critical",
+      "category": "key",
+      "regex": "-----BEGIN (?:RSA|EC|DSA|OPENSSH|PGP) PRIVATE KEY-----",
+      "keywords": [
+        "begin rsa private key",
+        "begin ec private key",
+        "begin openssh private key",
+        "begin pgp private key"
+      ],
+      "entropy_min": 0,
+      "description": "Explicit-algorithm PEM private key header (RSA/EC/DSA/OpenSSH/PGP)."
+    },
+    {
+      "id": "authorization-bearer-header",
+      "name": "Authorization: Bearer header",
+      "severity": "high",
+      "category": "generic",
+      "regex": "(?i)authorization\"?\\s*[:=]\\s*\"?bearer\\s+([A-Za-z0-9._~+/-]{20,}=*)",
+      "keywords": [
+        "authorization",
+        "bearer"
+      ],
+      "entropy_min": 3.5,
+      "description": "Bearer token embedded in an Authorization header value."
+    },
+    {
+      "id": "authorization-basic-header",
+      "name": "Authorization: Basic header",
+      "severity": "high",
+      "category": "generic",
+      "regex": "(?i)authorization\"?\\s*[:=]\\s*\"?basic\\s+([A-Za-z0-9+/]{16,}={0,2})",
+      "keywords": [
+        "authorization",
+        "basic"
+      ],
+      "entropy_min": 3,
+      "description": "Base64 Basic-auth credential in an Authorization header value."
+    },
+    {
+      "id": "composer-auth-bearer",
+      "name": "Composer auth.json bearer",
+      "severity": "high",
+      "category": "registry",
+      "regex": "(?i)\"bearer\"\\s*:\\s*\\{[^}]*\"[^\"]+\"\\s*:\\s*\"([A-Za-z0-9._-]{16,})\"",
+      "keywords": [
+        "\"bearer\""
+      ],
+      "entropy_min": 3.5,
+      "description": "Bearer token in PHP Composer auth.json (private package repos)."
+    },
+    {
+      "id": "sshpass-inline-password",
+      "name": "sshpass inline password",
+      "severity": "high",
+      "category": "generic",
+      "regex": "(?i)sshpass\\s+-p\\s*['\"]?([^\\s'\"]{3,})",
+      "keywords": [
+        "sshpass"
+      ],
+      "entropy_min": 0,
+      "description": "Plaintext SSH password passed to sshpass -p in scripts."
+    },
+    {
+      "id": "hashicorp-vault-service-token",
+      "name": "HashiCorp Vault Service Token",
+      "severity": "critical",
+      "category": "secrets-mgmt",
+      "regex": "\\b(hvs\\.[A-Za-z0-9_-]{24,})",
+      "keywords": [
+        "hvs."
+      ],
+      "entropy_min": 3.5,
+      "description": "HashiCorp Vault service token (hvs.)."
+    },
+    {
+      "id": "hashicorp-vault-batch-token",
+      "name": "HashiCorp Vault Batch Token",
+      "severity": "critical",
+      "category": "secrets-mgmt",
+      "regex": "\\b(hvb\\.[A-Za-z0-9_-]{24,})",
+      "keywords": [
+        "hvb."
+      ],
+      "entropy_min": 3.5,
+      "description": "HashiCorp Vault batch token (hvb.)."
+    },
+    {
+      "id": "cloudflare-origin-ca-key",
+      "name": "Cloudflare Origin CA Key",
+      "severity": "high",
+      "category": "cloud",
+      "regex": "\\b(v1\\.0-[a-f0-9]{24}-[a-f0-9]{120,})",
+      "keywords": [
+        "v1.0-"
+      ],
+      "entropy_min": 3.5,
+      "description": "Cloudflare Origin CA key."
+    },
+    {
+      "id": "new-relic-license-key",
+      "name": "New Relic License Key",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b([a-z0-9]{36}NRAL)\\b",
+      "keywords": [
+        "nral"
+      ],
+      "entropy_min": 3,
+      "description": "New Relic license/ingest key (ends NRAL)."
+    },
+    {
+      "id": "databricks-api-token",
+      "name": "Databricks API Token",
+      "severity": "high",
+      "category": "data",
+      "regex": "\\b(dapi[a-f0-9]{32})\\b",
+      "keywords": [
+        "dapi"
+      ],
+      "entropy_min": 3,
+      "description": "Databricks personal access token (dapi)."
+    },
+    {
+      "id": "dynatrace-api-token",
+      "name": "Dynatrace API Token",
+      "severity": "high",
+      "category": "observability",
+      "regex": "\\b(dt0c01\\.[A-Z0-9]{24}\\.[A-Z0-9]{64})\\b",
+      "keywords": [
+        "dt0c01."
+      ],
+      "entropy_min": 3.5,
+      "description": "Dynatrace API token (dt0c01.)."
+    },
+    {
+      "id": "postman-api-token",
+      "name": "Postman API Key",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(PMAK-[a-f0-9]{24}-[a-f0-9]{34})\\b",
+      "keywords": [
+        "pmak-"
+      ],
+      "entropy_min": 3,
+      "description": "Postman API key (PMAK-)."
+    },
+    {
+      "id": "notion-integration-token",
+      "name": "Notion Integration Token",
+      "severity": "high",
+      "category": "saas",
+      "regex": "\\b(ntn_[A-Za-z0-9]{40,})\\b",
+      "keywords": [
+        "ntn_"
+      ],
+      "entropy_min": 3.5,
+      "description": "Notion internal integration token (ntn_)."
+    },
+    {
+      "id": "clojars-api-token",
+      "name": "Clojars Deploy Token",
+      "severity": "high",
+      "category": "registry",
+      "regex": "\\b(CLOJARS_[A-Za-z0-9]{50,})\\b",
+      "keywords": [
+        "clojars_"
+      ],
+      "entropy_min": 3.5,
+      "description": "Clojars deploy token (CLOJARS_)."
+    },
+    {
+      "id": "easypost-api-token",
+      "name": "EasyPost API Token",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "\\b(EZ[AT]K[A-Za-z0-9]{40,})\\b",
+      "keywords": [
+        "ezak",
+        "eztk"
+      ],
+      "entropy_min": 3.5,
+      "description": "EasyPost API token (EZAK/EZTK)."
+    },
+    {
+      "id": "typeform-api-token",
+      "name": "Typeform API Token",
+      "severity": "medium",
+      "category": "saas",
+      "regex": "\\b(tfp_[A-Za-z0-9._=-]{40,})",
+      "keywords": [
+        "tfp_"
+      ],
+      "entropy_min": 3.5,
+      "description": "Typeform personal access token (tfp_)."
+    },
+    {
+      "id": "jfrog-access-token",
+      "name": "JFrog Access Token (JWT)",
+      "severity": "critical",
+      "category": "registry",
+      "regex": "\\b(eyJ2ZXIiOiIyIiw[A-Za-z0-9_.+/=-]{40,})",
+      "keywords": [
+        "eyj2zxiioiiyiiw"
+      ],
+      "entropy_min": 0,
+      "description": "JFrog Access/Artifactory access token (scoped JWT with ver:2 header)."
+    },
+    {
+      "id": "snowflake-token-context",
+      "name": "Snowflake Password/Token",
+      "severity": "high",
+      "category": "data",
+      "regex": "(?i)snowflake[a-z0-9._\\- ]{0,25}(?:password|token|secret|pwd)[\"\\']?\\s*[:=]\\s*[\"\\']?([A-Za-z0-9!@#$%^&*_-]{8,80})",
+      "keywords": [
+        "snowflake"
+      ],
+      "entropy_min": 0,
+      "description": "Snowflake password/token near a 'snowflake' reference."
+    },
+    {
+      "id": "age-secret-key",
+      "name": "age Secret Key",
+      "severity": "critical",
+      "category": "key",
+      "regex": "\\b(AGE-SECRET-KEY-1[0-9A-Z]{50,})\\b",
+      "keywords": [
+        "age-secret-key-1"
+      ],
+      "entropy_min": 3,
+      "description": "age encryption secret key."
+    }
+  ]
+}

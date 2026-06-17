@@ -1,0 +1,25 @@
+# Build output
+/dist/
+arthunt
+arthunt.exe
+*.exe
+
+# Local Go toolchain / caches
+/.toolchain/
+/.cache/
+
+# Scan artifacts — MAY CONTAIN LIVE SECRETS, never commit
+*.errors.jsonl
+*.ckpt
+arthunt-report.*
+audit-*.json
+audit-*.csv
+audit-*.html
+*-report.json
+*-report.csv
+*-report.html
+
+# Editor / OS noise
+*.tmp.*
+*.swp
+.DS_Store
